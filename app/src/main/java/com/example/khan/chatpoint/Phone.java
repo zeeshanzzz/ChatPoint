@@ -41,9 +41,6 @@ public class Phone extends AppCompatActivity implements View.OnClickListener {
         codePicker=findViewById(R.id.Picker);
         codePicker.registerCarrierNumberEditText(nb);
         Myphn.setOnClickListener(this);
-
-
-
     }
 
     @Override
