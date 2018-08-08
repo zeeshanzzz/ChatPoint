@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "122007791483",
+    "firebase_url": "https://chatpoint-61b34.firebaseio.com",
+    "project_id": "chatpoint-61b34",
+    "storage_bucket": "chatpoint-61b34.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122007791483:android:b182cefda3de55b0",
+        "android_client_info": {
+          "package_name": "com.example.khan.chatpoint"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122007791483-7nfdddjogqb0ib9qaplmn7i4uom6jgnp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.khan.chatpoint",
+            "certificate_hash": "d5a4ee60dbb384fc1f46f11184db8b86c1b9f75e"
+          }
+        },
+        {
+          "client_id": "122007791483-rssrbrn9gfcbhjq519u7rb75cjj1jh74.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7CiCRWEJcXaNJAs5-6OnU_YifqMK_0ac"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122007791483-rssrbrn9gfcbhjq519u7rb75cjj1jh74.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
