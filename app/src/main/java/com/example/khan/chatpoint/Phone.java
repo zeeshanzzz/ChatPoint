@@ -47,7 +47,7 @@ public class Phone extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
         String number;
         number=codePicker.getFullNumberWithPlus();
-        auth=FirebaseAuth.getInstance();
+
 
 
          PhoneAuthProvider.getInstance().verifyPhoneNumber(
