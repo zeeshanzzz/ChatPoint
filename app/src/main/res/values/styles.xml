@@ -3,9 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#c21761</item>
-        <item name="colorPrimaryDark">#df166d</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
+        <item name="cardViewStyle">@style/CardView</item>
+        <item name="colorPrimary">#9932CC</item>
+        <item name="colorPrimaryDark">#8B008B</item>
+        <item name="colorAccent">#800080</item>
     </style>
 
 </resources>

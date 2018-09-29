@@ -7,8 +7,11 @@
 
 
     android:background="@color/colorPrimary"
+    android:elevation="4dp"
     android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
+    android:visibility="visible"
     tools:elevation="4dp"
     tools:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar">
+
 
 </android.support.v7.widget.Toolbar>

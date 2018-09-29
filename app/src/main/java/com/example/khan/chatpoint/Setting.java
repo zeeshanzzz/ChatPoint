@@ -42,9 +42,9 @@ public class Setting extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String name=dataSnapshot.child("name").getValue().toString();
-                String status=dataSnapshot.child("status").getValue().toString();
+             //   String status=dataSnapshot.child("status").getValue().toString();
                 viewName.setText(name);
-                viewstatus.setText(status);
+             //   viewstatus.setText(status);
 
 
 

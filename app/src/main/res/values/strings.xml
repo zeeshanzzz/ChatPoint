@@ -6,4 +6,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textPhone">Verify your phone number,this number will be used to conntact
+        with your friend</string>
+    <string name="chat">Chat</string>
+    <string name="confirm_code">Confirm code</string>
+    <string name="verify_phone">Verify Phone</string>
+    <string name="resend_code">Resend code</string>
+    <string name="phone_number">phone number</string>
+    <string name="already_have_account">Already Have Account</string>
+    <string name="need_a_new_account">NEED A NEW ACCOUNT</string>
+    <string name="status">status</string>
+    <string name="name">Name</string>
+    <string name="type_the_message">Type the message</string>
+    <string name="hello_bubbletextvew">Hello BubbleTextVew</string>
+    <string name="contact">Contact</string>
+
 </resources>

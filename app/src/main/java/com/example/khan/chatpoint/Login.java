@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,8 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
-    TextInputLayout mail,name,password,phn;
-    EditText code;
+    TextInputLayout mail,name,password;
+
     Button btn;
     private FirebaseAuth auth;
     TextView view;
@@ -46,11 +45,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mail=findViewById(R.id.Chat_email2);
         name=findViewById(R.id.Name);
-        view=findViewById(R.id.textView);
+        view=findViewById(R.id.textMoreText);
         password=findViewById(R.id.chat_password2);
         btn=findViewById(R.id.Button_create_account);
-        phn=findViewById(R.id.Chat_phonee);
-        code=findViewById(R.id.chat_codee);
         auth = FirebaseAuth.getInstance();
         btn.setOnClickListener(this);
     }

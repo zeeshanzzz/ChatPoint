@@ -34,11 +34,11 @@ public class pageAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position){
         switch(position){
             case 0:
-                return "Request";
+                return "Chats";
             case 1:
-                return "chats";
+                return "Contacts";
             case 2:
-                return "Calls";
+                return "Unkonwn";
 
         }
 

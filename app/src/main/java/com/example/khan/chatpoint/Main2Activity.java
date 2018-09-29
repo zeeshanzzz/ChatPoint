@@ -25,7 +25,7 @@ private TabLayout tabLayout;
         setContentView(R.layout.activity_main2);
         pager=findViewById(R.id.chat_viewpager);
         tabLayout=findViewById(R.id.tabs);
-        pageAdapter=new pageAdapter(getSupportFragmentManager());
+      pageAdapter=new pageAdapter(getSupportFragmentManager());
         pager.setAdapter(pageAdapter);
         tabLayout.setupWithViewPager(pager);
         toolbar=findViewById(R.id.chat_tool);
