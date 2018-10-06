@@ -26,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class TAB1 extends Fragment {
@@ -80,11 +82,12 @@ private void getContactlist(){
     Cursor phones = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
     while (phones.moveToNext()) {
 
-        String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+        final String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
         String Phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
         ContactList  contactList = new ContactList("",name, Phone);
         contacts.add(contactList);
         getUser(contactList);
+
     }
 
 }
@@ -98,29 +101,29 @@ private void getContactlist(){
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-
                     String phone="",name ="";
                     for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                         if(snapshot.child("phone").getValue()!=null)
                             phone=snapshot.child("phone").getValue().toString();
                         if(snapshot.child("name").getValue()!=null)
                             name=snapshot.child("name").getValue().toString();
+
                         String mykey=snapshot.getKey();
                         ContactList contactList1= new ContactList(snapshot.getKey(),name,phone);
                         if(name.equals(phone))
-                            for (ContactList mItera : contacts) {
+                            for (final ContactList mItera : contacts) {
                                 if (mItera.getPhone().equals(contactList1.getPhone())) {
                                     contactList1.setName(mItera.getName());
 
+                                }
+
 
                                 }
-                            }
+
 
                         list.add(contactList1);
                         madapter.notifyDataSetChanged();
-                        String currentdate= DateFormat.getDateTimeInstance().format(new Date());
-                        DatabaseReference mreference=FirebaseDatabase.getInstance().getReference().child("Friends").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        mreference.child(contactList1.getUid()).setValue(currentdate);
+
 
 
                     }

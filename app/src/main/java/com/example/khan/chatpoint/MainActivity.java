@@ -57,10 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         if(view==b2){
-
-
-            Intent intent=new Intent(MainActivity.this,Name.class);
+            Intent intent=new Intent(MainActivity.this,Chat_Activity.class);
             startActivity(intent);
+            finish();
         }
     }
     private void getPermission(){

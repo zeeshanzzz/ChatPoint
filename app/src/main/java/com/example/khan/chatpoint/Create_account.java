@@ -158,6 +158,8 @@ public class Create_account extends AppCompatActivity implements View.OnClickLis
                                             HashMap<String,Object> map=new HashMap<>();
                                             map.put("phone",firebaseUser.getPhoneNumber());
                                             map.put("name",firebaseUser.getPhoneNumber());
+                                            map.put("image","Default");
+                                            map.put("Thumbnail","default");
                                             reference.updateChildren(map);
 
                                         }

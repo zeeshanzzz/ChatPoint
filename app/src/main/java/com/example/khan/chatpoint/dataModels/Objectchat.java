@@ -1,18 +1,18 @@
 package com.example.khan.chatpoint.dataModels;
 
 public class Objectchat {
-    private String chatId, FriendName;
+    private String chatId, name;
 
     public String getChatId() {
         return chatId;
     }
 
     public String getFriendName() {
-        return FriendName;
+        return name;
     }
 
     public void setFriendName(String friendName) {
-        FriendName = friendName;
+        name = friendName;
     }
 
     public void setChatId(String chatId) {
@@ -21,5 +21,6 @@ public class Objectchat {
 
     public Objectchat(String chatId) {
         this.chatId = chatId;
+
     }
 }

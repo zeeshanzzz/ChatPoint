@@ -42,7 +42,7 @@ public class Chat_Activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         if(item.getItemId()==R.id.app_bar_search){
-            FirebaseAuth.getInstance().signOut();
+        //    FirebaseAuth.getInstance().signOut();
             Intent intent=new Intent(Chat_Activity.this,MainActivity.class);
             startActivity(intent);
             finish();

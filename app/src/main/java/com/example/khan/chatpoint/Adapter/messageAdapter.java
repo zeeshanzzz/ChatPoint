@@ -13,41 +13,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.daasuu.bl.ArrowDirection;
 import com.daasuu.bl.BubbleLayout;
 import com.example.khan.chatpoint.R;
 import com.example.khan.chatpoint.dataModels.MessageObject;
-import com.github.library.bubbleview.BubbleDrawable;
-import com.github.library.bubbleview.BubbleTextView;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 public class messageAdapter extends RecyclerView.Adapter<messageAdapter.MessageViewHolder> {
     ArrayList<MessageObject> messagelist;
-    private BubbleDrawable.ArrowLocation mArrowLocation;
+    public Boolean bBoolean=false;
+
     private FirebaseAuth firebaseAuth;
     public messageAdapter(ArrayList<MessageObject> messagelist) {
         this.messagelist =messagelist;
     }
     public class MessageViewHolder extends RecyclerView.ViewHolder  {
         public ImageView imageView;
-        private BubbleTextView bubbleTextView;
+        public TextView view;
         public ConstraintLayout constraintLayout;
+        public LinearLayout linearLayout;
         public BubbleLayout bubbleLayout;
 
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
-            //   imageView=itemView.findViewById(R.id.contact_image);
-          //  bubbleTextView.buildDrawingCache();
-        //    bubbleDrawable=new BubbleDrawable.Builder().bubbleColor(R.color.colorwhite);
-            bubbleTextView=itemView.findViewById(R.id.Mymessage);
-            constraintLayout=itemView.findViewById(R.id.MessageLayout);
+            linearLayout=itemView.findViewById(R.id.MessageLayout);
             bubbleLayout=itemView.findViewById(R.id.bubbli);
+            view=itemView.findViewById(R.id.messageview);
+
         }
-
-
     }
 
     @NonNull
@@ -64,25 +64,50 @@ public class messageAdapter extends RecyclerView.Adapter<messageAdapter.MessageV
     public void onBindViewHolder(@NonNull MessageViewHolder listHolder, final int i) {
         String messageId=messagelist.get(i).getMessageId();
          String my=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        LinearLayout.LayoutParams lp= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);;
+        boolean aBoolean=false;
          if(messageId.equals(my)){
-             //listHolder.mMessage.setBackgroundResource(R.color.colorwhite);
-             int left,  right,  top,  bottom;
-             RectF mrect=new RectF();
-             BubbleDrawable bubbleDrawable=new BubbleDrawable.Builder().rect(mrect).bubbleColor(R.color.colorwhite).build();
-             listHolder.bubbleTextView.getDrawableState();
-             listHolder.bubbleTextView.setTextColor(Color.BLACK);
-             listHolder.bubbleLayout.setBubbleColor(R.color.colorwhite);
-             
+
+            DejaVu(listHolder,lp);
+
+
+
+             lp.gravity= Gravity.RIGHT;
+             listHolder.view.setTextColor(R.color.black);
+             listHolder.bubbleLayout.setBubbleColor(Color.WHITE);
+             listHolder.bubbleLayout.setLayoutParams(lp);
+             //listHolder.bubbleLayout.setLayoutParams(lp);
+             listHolder.bubbleLayout.setArrowDirection(ArrowDirection.RIGHT);
+
 
          }
          else {
-         //    listHolder.bubbleDrawable=new BubbleDrawable.Builder().bubbleColor(R.color.colorPrimary);
-             listHolder.bubbleTextView.setTextColor(Color.WHITE);
-             listHolder.bubbleTextView.setGravity(Gravity.LEFT);
+
+            listHolder.view.setTextColor(Color.WHITE);
+            listHolder.bubbleLayout.setArrowDirection(ArrowDirection.LEFT);
          }
-        listHolder.bubbleTextView.setText(messagelist.get(i).getMessage());
+       listHolder.view.setText(messagelist.get(i).getMessage());
        // listHolder.mSender.setText(messagelist.get(i).getMessageId());
        // listHolder.mSender.setText(messagelist.get(i).getSenderId());
+
+    }
+    public void DejaVu(MessageViewHolder messageViewHolder,LinearLayout.LayoutParams layoutParams){
+       // LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //   lp.setMargins(100,300,2,0);
+        if(bBoolean==false){
+            //   lp.setMargins(100,300,2,0);
+            layoutParams.topMargin=300;
+            layoutParams.rightMargin=0;
+            messageViewHolder.bubbleLayout.setLayoutParams(layoutParams);
+            bBoolean=true;
+        }
+        else {
+            layoutParams.topMargin = 30;
+            layoutParams.rightMargin = 0;
+
+        }
+      // messageViewHolder.bubbleLayout.setLayoutParams(lp);
+
 
     }
 

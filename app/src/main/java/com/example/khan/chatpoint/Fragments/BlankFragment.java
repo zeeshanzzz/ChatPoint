@@ -50,6 +50,7 @@ public class BlankFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_blank, container, false);
+
         chatlist =new ArrayList<>();
         mblankRecyler =view.findViewById(R.id.blankRecycler);
         recyclerView();
@@ -74,6 +75,7 @@ public class BlankFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final String name1 = "";
                 if(dataSnapshot.exists()){
                     for(DataSnapshot snap:dataSnapshot.getChildren()){
                         Objectchat objectchat=new Objectchat(snap.getKey());

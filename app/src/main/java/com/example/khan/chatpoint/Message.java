@@ -1,6 +1,7 @@
 package com.example.khan.chatpoint;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -23,15 +24,17 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.khan.chatpoint.Adapter.messageAdapter;
+import com.example.khan.chatpoint.Fragments.BlankFragment;
+import com.example.khan.chatpoint.Fragments.TAB1;
 import com.example.khan.chatpoint.dataModels.MessageObject;
 import com.example.khan.chatpoint.dataModels.Objectchat;
-import com.github.library.bubbleview.BubbleTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,40 +48,56 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
     private RecyclerView MrecyclerView;
     private LinearLayoutManager Mlayout;
     private messageAdapter MessageAdapter;
+    private TextView userview;
    public DatabaseReference reference;
     ArrayList<MessageObject> mlist;
-  public  String Chatid,chatid,receverId;
+  public  String Chatid,chatid,receverId,Username,Friend;
     String  name_of_user;
   private FirebaseAuth firebaseAuth;
-  BubbleTextView bubbleTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        if(getIntent()!=null)
+            chatid="";
+        receverId="";
+        name_of_user="";
+        Friend="";
+        Username="";
+        Friend=getIntent().getStringExtra("otherUser");
+        receverId=getIntent().getStringExtra("receiver");
+        chatid=getIntent().getStringExtra("chatId");
+        name_of_user=getIntent().getStringExtra("chatname");
+        Username=getIntent().getStringExtra("Username");
+
+        if(getIntent()!=null)
+            Chatid="";
+        Chatid=getIntent().getStringExtra("chatId");
         toolbar=findViewById(R.id.message_toolbar);
         setSupportActionBar(toolbar);
     ActionBar actionBar= getSupportActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setDisplayShowCustomEnabled(true);
-    actionBar.setTitle("Anas bin shahid");
+    actionBar.setTitle(name_of_user);
    // actionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater layoutInflater= (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view=layoutInflater.inflate(R.layout.customtool,null);
+        userview=view.findViewById(R.id.Username);
+        userview.setText(Username);
+        userview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(Message.this,Contact_profile.class);
+                intent.putExtra("otherman",Friend);
+                intent.putExtra("AgainName",Username);
+                startActivity(intent);
+            }
+        });
         actionBar.setCustomView(view);
 
-        if(getIntent()!=null)
-            chatid="";
-        receverId="";
-       name_of_user="";
-        receverId=getIntent().getStringExtra("receiver");
-            chatid=getIntent().getStringExtra("chatId");
-            name_of_user=getIntent().getStringExtra("chatname");
 
-        if(getIntent()!=null)
-            Chatid="";
-
-            Chatid=getIntent().getStringExtra("chatId");
       //  if(!Chatid.isEmpty() && Chatid!=null){
         reference=FirebaseDatabase.getInstance().getReference().child("chat").child(Chatid);
         reference.keepSynced(true);
@@ -208,4 +227,6 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
 
 
     }
+
+
 }

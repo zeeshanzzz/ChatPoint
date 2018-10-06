@@ -1,7 +1,7 @@
 package com.example.khan.chatpoint.Adapter;
-
+import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +15,20 @@ import com.example.khan.chatpoint.Message;
 import com.example.khan.chatpoint.R;
 import com.example.khan.chatpoint.dataModels.ContactList;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class adapter extends RecyclerView.Adapter<adapter.listHolder> {
     ArrayList<ContactList> userlist;
@@ -25,10 +36,11 @@ public class adapter extends RecyclerView.Adapter<adapter.listHolder> {
         this.userlist=userlist;
     }
     public class listHolder extends RecyclerView.ViewHolder  {
-        public ImageView imageView;
+        public CircleImageView imageView;
         private  TextView name,C_Phone;
         public ConstraintLayout constraintLayout;
         public  int count=0;
+      public   SharedPreferences sharedPreferences;
 
 
         public listHolder(@NonNull View itemView) {
@@ -37,6 +49,7 @@ public class adapter extends RecyclerView.Adapter<adapter.listHolder> {
          //   imageView=itemView.findViewById(R.id.contact_image);
             name=itemView.findViewById(R.id.chat_namee);
             C_Phone=itemView.findViewById(R.id.contact_list);
+            imageView=itemView.findViewById(R.id.chat_image);
             constraintLayout=itemView.findViewById(R.id.layout1);
         }
 
@@ -53,9 +66,49 @@ public class adapter extends RecyclerView.Adapter<adapter.listHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull listHolder listHolder, final int i) {
+    public void onBindViewHolder(@NonNull final listHolder listHolder, final int i) {
         listHolder.name.setText(userlist.get(i).getName());
+        final String currentdate= DateFormat.getDateTimeInstance().format(new Date());
+        final DatabaseReference mreference=FirebaseDatabase.getInstance().getReference().child("Friends").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(userlist.get(i).getUid());
+        mreference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map hashMap=new HashMap<>();
+                hashMap.put("date",currentdate);
+                hashMap.put("name", userlist.get(i).getName());
+                mreference.updateChildren(hashMap);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         listHolder.C_Phone.setText(userlist.get(i).getPhone());
+        DatabaseReference reference3=FirebaseDatabase.getInstance().getReference().child("User").child(userlist.get(i).getUid()).child("image");
+        reference3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String Imageuri="";
+                if(dataSnapshot.getValue()!=null)
+                    Imageuri=dataSnapshot.getValue().toString();
+                Picasso.get().load(Imageuri).into(listHolder.imageView);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
         listHolder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,11 +117,29 @@ public class adapter extends RecyclerView.Adapter<adapter.listHolder> {
                 if(exist){
                     exist=false;
                     key= FirebaseDatabase.getInstance().getReference().child("chat").push().getKey();
-                   // FirebaseDatabase.getInstance().getReference().child("Friends").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(true);
+
                     FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(true);
             String receverid=userlist.get(i).getUid();
             String name=userlist.get(i).getName();
-                  //  FirebaseDatabase.getInstance().getReference().child("Friends").child(userlist.get(i).getUid()).child("chat").child(key).setValue(true);
+
+
+                FirebaseDatabase.getInstance().getReference().child("userchats").child(FirebaseAuth.getInstance().getUid()).child(key).setValue(true);
+                final DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("userchats").child(FirebaseAuth.getInstance().getUid()).child(key);
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Map hashMap=new HashMap<>();
+                        hashMap.put("otherID",userlist.get(i).getUid());
+                        reference.updateChildren(hashMap);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
                   FirebaseDatabase.getInstance().getReference().child("User").child(userlist.get(i).getUid()).child("chat").child(key).setValue(true);
                     Intent intent = new Intent(view.getContext(), Message.class);
                     intent.putExtra("chatId", key);

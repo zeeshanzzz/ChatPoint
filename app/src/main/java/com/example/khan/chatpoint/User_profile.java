@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.storage.FirebaseStorage;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -30,6 +31,8 @@ public class User_profile extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 3;
     AlertDialog.Builder alertDialog;
     AlertDialog alertDialog1;
+    FirebaseStorage firebaseStorage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +117,7 @@ public class User_profile extends AppCompatActivity {
                   Uri resultUri = result.getUri();
                   try {
                       Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                      firebaseStorage=FirebaseStorage.getInstance();
                       profileimageView.setImageBitmap(bitmap);
                       alertDialog1.cancel();
                   } catch (IOException e) {

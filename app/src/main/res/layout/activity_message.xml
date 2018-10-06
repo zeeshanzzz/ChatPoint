@@ -15,14 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/message_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="false"
-            android:src="@mipmap/ic_launcher_round"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="28dp" />
     </include>
 
     <android.support.v7.widget.RecyclerView
@@ -106,4 +98,5 @@
             app:layout_constraintTop_toTopOf="@+id/messagetext"
             app:layout_constraintVertical_bias="1.0" />
     </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>
