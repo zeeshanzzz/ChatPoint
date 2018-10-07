@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -25,7 +33,7 @@ public class User_profile extends AppCompatActivity {
     private ImageView profileimageView;
     private Button takebutton,gallerybutton,cancelbutton;
     private EditText profileText;
-    private TextView profiletextview,textView;
+    private TextView profiletextview,textViewNumber,SatusTextview;
     protected static final int SELECT_PICTURE = 1;
     protected static final int Result_code = 2;
     static final int REQUEST_IMAGE_CAPTURE = 3;
@@ -40,7 +48,30 @@ public class User_profile extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
         profileimageView=findViewById(R.id.profile_image);
         profiletextview=findViewById(R.id.profile_name);
-        textView=findViewById(R.id.profile_number_edit);
+        textViewNumber=findViewById(R.id.profile_number);
+        SatusTextview=findViewById(R.id.profile_Status);
+        DatabaseReference firebaseDatabase=FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        firebaseDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String Image=dataSnapshot.child("image").getValue().toString();
+                Picasso.get().load(Image).into(profileimageView);
+                String Number=dataSnapshot.child("phone").getValue().toString();
+                textViewNumber.setText(Number);
+                String status=dataSnapshot.child("Status").getValue().toString();
+                SatusTextview.setText(status);
+                String Name=dataSnapshot.child("Name").getValue().toString();
+                profiletextview.setText(Name);
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         profileimageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

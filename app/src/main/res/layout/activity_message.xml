@@ -27,6 +27,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message_toolbar" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/Media_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/message_recycler"
+        app:layout_constraintVertical_bias="1.0" />
+
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
@@ -41,7 +54,7 @@
             android:id="@+id/messagetext"
             android:layout_width="285dp"
             android:layout_height="40dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/round"
             android:ems="10"
             android:hint="   Type a message"
@@ -75,14 +88,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
             android:clickable="true"
-            android:focusable="true"
 
+            android:focusable="true"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/Attachmentbtn"
             app:layout_constraintTop_toTopOf="@+id/messagetext"
             app:layout_constraintVertical_bias="0.625"
             app:srcCompat="@drawable/ic_keyboard_voice_black_24dp" />
@@ -92,11 +104,23 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:background="@drawable/ic_camera_alt_black_24dp"
-            android:text="Button"
             app:layout_constraintBottom_toBottomOf="@+id/messagetext"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/messagetext"
             app:layout_constraintVertical_bias="1.0" />
+
+        <Button
+            android:id="@+id/Attachmentbtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/ic_attach_file_black_24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/messagetext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.841"
+            app:layout_constraintStart_toStartOf="@+id/button"
+            app:layout_constraintTop_toTopOf="@+id/messagetext" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

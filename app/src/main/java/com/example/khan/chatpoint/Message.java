@@ -2,6 +2,9 @@ package com.example.khan.chatpoint;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,17 +20,21 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.khan.chatpoint.Adapter.MediaAdpter;
 import com.example.khan.chatpoint.Adapter.messageAdapter;
 import com.example.khan.chatpoint.Fragments.BlankFragment;
 import com.example.khan.chatpoint.Fragments.TAB1;
 import com.example.khan.chatpoint.dataModels.MessageObject;
 import com.example.khan.chatpoint.dataModels.Objectchat;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -35,7 +42,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,14 +54,18 @@ import java.util.Map;
 public class Message extends AppCompatActivity implements View.OnClickListener {
     FloatingActionButton messageButton,recordButton;
     EditText messageText;
+    Button attachbtn;
     private android.support.v7.widget.Toolbar toolbar;
-
-    private RecyclerView MrecyclerView;
+    private int PICK_IMAGE_REQUEST = 1;
+    private RecyclerView MrecyclerView,MediaRecyler;
     private LinearLayoutManager Mlayout;
+    private LinearLayoutManager Medialayout;
+    private MediaAdpter mediaAdpter;
     private messageAdapter MessageAdapter;
     private TextView userview;
    public DatabaseReference reference;
     ArrayList<MessageObject> mlist;
+    ArrayList<String> mediaUSerlist=new ArrayList<>();
   public  String Chatid,chatid,receverId,Username,Friend;
     String  name_of_user;
   private FirebaseAuth firebaseAuth;
@@ -101,6 +116,7 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
       //  if(!Chatid.isEmpty() && Chatid!=null){
         reference=FirebaseDatabase.getInstance().getReference().child("chat").child(Chatid);
         reference.keepSynced(true);
+        attachbtn=findViewById(R.id.Attachmentbtn);
         messageText=findViewById(R.id.messagetext);
         messageText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -132,6 +148,7 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                attachbtn.setVisibility(View.GONE);
 
             }
 
@@ -140,6 +157,7 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
                 if(messageText.length()<=0){
                     recordButton.setVisibility(View.VISIBLE);
                     messageButton.setVisibility(View.GONE);
+                    attachbtn.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -148,8 +166,38 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
 
 
         initilaizere();
+        initilaizmedia();
      getchatmessage();
+     attachbtn.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             recordButton.setVisibility(View.GONE);
+             messageButton.setVisibility(View.VISIBLE);
+             Opengallery();
 
+         }
+     });
+
+    }
+    private  void Opengallery(){
+        Intent intent = new Intent();
+
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
+
+    }
+    private  void initilaizmedia(){
+       // mlist=new ArrayList<>();
+       MediaRecyler=findViewById(R.id.Media_recycler);
+       MediaRecyler.setNestedScrollingEnabled(false);
+       MediaRecyler.setHasFixedSize(false);
+       Medialayout = new LinearLayoutManager(this, LinearLayout.HORIZONTAL, false);
+        MediaRecyler.setLayoutManager(Medialayout);
+        mediaAdpter = new MediaAdpter(this,mediaUSerlist);
+        MediaRecyler.setAdapter(mediaAdpter);
     }
     private  void initilaizere(){
          mlist=new ArrayList<>();
@@ -159,19 +207,65 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
         MrecyclerView.setLayoutManager(Mlayout);
       MessageAdapter = new messageAdapter(mlist);
         MrecyclerView.setAdapter(MessageAdapter);
+
     }
+    ArrayList<String> mediaIdList=new ArrayList<>();
+    int total=0;
     private void  sendMessage(){
+        final Map hashMap=new HashMap<>();
+        String messageId=reference.push().getKey();
+        hashMap.put("creator", FirebaseAuth.getInstance().getUid());
+        DatabaseReference    myreference=reference.child(messageId);
         if(!messageText.getText().toString().isEmpty()){
-     DatabaseReference    myreference=reference.push();
-            Map hashMap=new HashMap<>();
             hashMap.put("text",messageText.getText().toString());
-            hashMap.put("creator", FirebaseAuth.getInstance().getUid());
-         myreference.updateChildren(hashMap);
+       //  myreference.updateChildren(hashMap);
+
+         if(!mediaUSerlist.isEmpty()) {
+             for (String mediaUri : mediaUSerlist) {
+
+                 String mediaId = myreference.child("media").push().getKey();
+                 mediaIdList.add(mediaId);
+                 final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("chat").child(chatid).child(messageId).child(mediaId);
+                 UploadTask uploadTask=storageReference.putFile(Uri.parse(mediaUri));
+                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                     @Override
+                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                             @Override
+                             public void onSuccess(Uri uri) {
+                                 hashMap.put("/media/"+mediaIdList.get(total)+"/",uri.toString());
+                                 total++;
+                                 if(total==mediaIdList.size()){
+                                     updateDatabase(reference,hashMap);
+
+                                 }
+
+
+                             }
+                         });
+
+                     }
+                 });
+
+             }
+         }
+         else{
+             if(!messageText.getText().toString().isEmpty())
+                 updateDatabase(reference,hashMap);
+
+         }
 
 
         }
 
 
+    }
+    private void updateDatabase(DatabaseReference reference22,Map map){
+
+        reference.updateChildren(map);
+        mediaIdList.clear();
+        mediaUSerlist.clear();
+        mediaAdpter.notifyDataSetChanged();
     }
 
     @Override
@@ -226,6 +320,29 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
 
 
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK ) {
+
+            Uri uri = data.getData();
+            if(data.getClipData()==null)
+                mediaUSerlist.add(data.getData().toString());
+            else {
+                for(int i=0;i<data.getClipData().getItemCount(); i++){
+                    mediaUSerlist.add(data.getClipData().getItemAt(i).getUri().toString());
+
+                }
+
+
+            }
+            mediaAdpter.notifyDataSetChanged();
+
+
+
+        }
     }
 
 
