@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        FirebaseUser user=auth.getCurrentUser();
+       FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+       FirebaseUser user=auth.getCurrentUser();
         if(user!=null){
             Intent intent=new Intent(MainActivity.this,Chat_Activity.class);
             startActivity(intent);

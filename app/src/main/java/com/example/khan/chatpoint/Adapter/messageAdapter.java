@@ -76,7 +76,7 @@ public class messageAdapter extends RecyclerView.Adapter<messageAdapter.MessageV
         boolean aBoolean=false;
          if(messageId.equals(my)){
 
-            DejaVu(listHolder,lp);
+          DejaVu(listHolder,lp);
 listHolder.linearLayout.setGravity(Gravity.RIGHT);
 
           // lp.setGravity(Gravity.CENTER);
@@ -92,6 +92,7 @@ listHolder.linearLayout.setGravity(Gravity.RIGHT);
 
          }
          else {
+             DejaVu(listHolder,lp);
 
             listHolder.view.setTextColor(Color.WHITE);
             listHolder.bubbleLayout.setArrowDirection(ArrowDirection.LEFT);
@@ -106,18 +107,14 @@ listHolder.linearLayout.setGravity(Gravity.RIGHT);
     public void DejaVu(MessageViewHolder messageViewHolder,RelativeLayout.LayoutParams layoutParams){
        // LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         //   lp.setMargins(100,300,2,0);
-        if(bBoolean==false){
+
             //   lp.setMargins(100,300,2,0);
-            layoutParams.topMargin=300;
+            layoutParams.topMargin=50;
             layoutParams.rightMargin=0;
             messageViewHolder.bubbleLayout.setLayoutParams(layoutParams);
             bBoolean=true;
-        }
-        else {
-            layoutParams.topMargin = 30;
-            layoutParams.rightMargin = 0;
 
-        }
+
       // messageViewHolder.bubbleLayout.setLayoutParams(lp);
 
 
