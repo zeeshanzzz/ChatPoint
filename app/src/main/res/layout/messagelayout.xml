@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/MessageLayout"
@@ -13,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
         android:padding="8dp"
         app:bl_arrowDirection="right"
         app:bl_arrowHeight="8dp"
@@ -22,20 +21,41 @@
         app:bl_bubbleColor="@color/colorstar1"
         app:bl_cornersRadius="6dp"
         app:bl_strokeWidth="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/messageview"
+        tools:layout_marginTop="30dp">
+        <android.support.constraint.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="4dp"
-            android:text="BubbleLayout"
-            android:textColor="@color/colorwhite"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/messageview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="BubbleLayout"
+                android:textColor="@color/colorwhite"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_marginLeft="0dp"
+                tools:layout_marginRight="4dp" />
+
+            <TextView
+                android:id="@+id/DataView"
+                android:layout_width="48dp"
+                android:layout_height="20dp"
+                android:layout_below="@id/messageview"
+                android:layout_gravity="right|clip_horizontal"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:text="Date"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/messageview"
+                app:layout_constraintTop_toTopOf="@+id/messageview"
+                tools:layout_marginLeft="140dp" />
+        </android.support.constraint.ConstraintLayout>
+
 
     </com.daasuu.bl.BubbleLayout>
-</LinearLayout>
+
+</RelativeLayout>

@@ -9,17 +9,20 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:elevation="0dp"
-        >
-    <include layout="@layout/layout"  android:id="@+id/chat_tool"/>
+        android:elevation="0dp">
+
+        <include
+            android:id="@+id/chat_tool"
+            layout="@layout/layout" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tablayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/colorPrimary"
             app:tabMode="fixed"

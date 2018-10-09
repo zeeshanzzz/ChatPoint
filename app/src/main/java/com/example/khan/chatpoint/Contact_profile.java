@@ -22,7 +22,7 @@ import java.util.Map;
 public class Contact_profile extends AppCompatActivity {
     Toolbar toolbar;
     public  String Userprofiler,UserName1;
-    private TextView view,Phoneview;
+    private TextView view,Phoneview,Satus;
     private ImageView imageView;
 
     @Override
@@ -37,10 +37,13 @@ public class Contact_profile extends AppCompatActivity {
         toolbar = findViewById(R.id.contact_toolbar);
         getSupportActionBar();
         setSupportActionBar(toolbar);
+        toolbar.setTitle("ChatPoint");
         imageView=findViewById(R.id.usr_image);
         view = findViewById(R.id.Profile_Name);
         view.setText(UserName1);
         Phoneview=findViewById(R.id.phoneView);
+        Satus=findViewById(R.id.textView8);
+        Satus.setText("Alone Soule");
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("User").child(Userprofiler);

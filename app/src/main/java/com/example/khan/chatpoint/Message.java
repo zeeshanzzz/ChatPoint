@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -48,6 +49,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,7 +67,7 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
     private TextView userview;
    public DatabaseReference reference;
     ArrayList<MessageObject> mlist;
-    ArrayList<String> mediaUSerlist=new ArrayList<>();
+    ArrayList<String> mediaUSerlist;
   public  String Chatid,chatid,receverId,Username,Friend;
     String  name_of_user;
   private FirebaseAuth firebaseAuth;
@@ -191,6 +193,7 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
     }
     private  void initilaizmedia(){
        // mlist=new ArrayList<>();
+        mediaUSerlist=new ArrayList<>();
        MediaRecyler=findViewById(R.id.Media_recycler);
        MediaRecyler.setNestedScrollingEnabled(false);
        MediaRecyler.setHasFixedSize(false);
@@ -212,17 +215,18 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
     ArrayList<String> mediaIdList=new ArrayList<>();
     int total=0;
     private void  sendMessage(){
+        MediaRecyler.setVisibility(View.INVISIBLE);
         final Map hashMap=new HashMap<>();
-        String messageId=reference.push().getKey();
+        String  currentDateTimeString = DateFormat.getDateFormat(this)
+                .format(new Date());
+        hashMap.put("date",currentDateTimeString);
         hashMap.put("creator", FirebaseAuth.getInstance().getUid());
-        DatabaseReference    myreference=reference.child(messageId);
-        if(!messageText.getText().toString().isEmpty()){
-            hashMap.put("text",messageText.getText().toString());
+        String messageId=reference.push().getKey();
+
+        final DatabaseReference    myreference=reference.child(messageId);
        //  myreference.updateChildren(hashMap);
-
-         if(!mediaUSerlist.isEmpty()) {
+            if(!mediaUSerlist.isEmpty()) {
              for (String mediaUri : mediaUSerlist) {
-
                  String mediaId = myreference.child("media").push().getKey();
                  mediaIdList.add(mediaId);
                  final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("chat").child(chatid).child(messageId).child(mediaId);
@@ -236,7 +240,7 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
                                  hashMap.put("/media/"+mediaIdList.get(total)+"/",uri.toString());
                                  total++;
                                  if(total==mediaIdList.size()){
-                                     updateDatabase(reference,hashMap);
+                                     updateDatabase(myreference,hashMap);
 
                                  }
 
@@ -250,19 +254,22 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
              }
          }
          else{
-             if(!messageText.getText().toString().isEmpty())
-                 updateDatabase(reference,hashMap);
+             Toast.makeText(this,"Emptylist",Toast.LENGTH_LONG).show();
+                 if(!messageText.getText().toString().isEmpty()) {
+                     hashMap.put("text", messageText.getText().toString());
+                     updateDatabase(myreference, hashMap);
+                 }
 
          }
 
 
-        }
+
 
 
     }
     private void updateDatabase(DatabaseReference reference22,Map map){
 
-        reference.updateChildren(map);
+        reference22.updateChildren(map);
         mediaIdList.clear();
         mediaUSerlist.clear();
         mediaAdpter.notifyDataSetChanged();
@@ -284,12 +291,19 @@ public class Message extends AppCompatActivity implements View.OnClickListener {
                 if(dataSnapshot.exists()){
                     String text="";
                     String creator="";
+                    String date="";
+                    ArrayList<String> list=new ArrayList<>();
                     if(dataSnapshot.child("text").getValue()!=null)
                         text=dataSnapshot.child("text").getValue().toString();
                     if(dataSnapshot.child("creator").getValue()!=null)
                         creator=dataSnapshot.child("creator").getValue().toString();
+                    if(dataSnapshot.child("date").getValue()!=null)
+                        date=dataSnapshot.child("date").getValue().toString();
+                    if(dataSnapshot.child("media").getChildrenCount()>0)
+                        for(DataSnapshot mediasnapshot:dataSnapshot.child("media").getChildren())
+                            list.add(mediasnapshot.getValue().toString());
 
-                    MessageObject messageObject=new MessageObject(creator,text);
+                    MessageObject messageObject=new MessageObject(creator,text,list,date);
                     mlist.add(messageObject);
                     Mlayout.scrollToPosition(mlist.size()-1);
                     MessageAdapter.notifyDataSetChanged();

@@ -38,7 +38,7 @@ public class pageAdapter extends FragmentPagerAdapter {
             case 1:
                 return "Contacts";
             case 2:
-                return "Unkonwn";
+                return "Status";
 
         }
 

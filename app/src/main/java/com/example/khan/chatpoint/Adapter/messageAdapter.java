@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.daasuu.bl.ArrowDirection;
@@ -22,6 +23,7 @@ import com.example.khan.chatpoint.R;
 import com.example.khan.chatpoint.dataModels.MessageObject;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -35,9 +37,9 @@ public class messageAdapter extends RecyclerView.Adapter<messageAdapter.MessageV
     }
     public class MessageViewHolder extends RecyclerView.ViewHolder  {
         public ImageView imageView;
-        public TextView view;
+        public TextView view,dateview;
         public ConstraintLayout constraintLayout;
-        public LinearLayout linearLayout;
+        public RelativeLayout linearLayout;
         public BubbleLayout bubbleLayout;
 
 
@@ -45,7 +47,11 @@ public class messageAdapter extends RecyclerView.Adapter<messageAdapter.MessageV
             super(itemView);
             linearLayout=itemView.findViewById(R.id.MessageLayout);
             bubbleLayout=itemView.findViewById(R.id.bubbli);
+           // bubbleLayout2=itemView.findViewById(R.id.bubbli2);
+          //  imageView=itemView.findViewById(R.id.bubbleimage);
+
             view=itemView.findViewById(R.id.messageview);
+            dateview=itemView.findViewById(R.id.DataView);
 
         }
     }
@@ -64,19 +70,23 @@ public class messageAdapter extends RecyclerView.Adapter<messageAdapter.MessageV
     public void onBindViewHolder(@NonNull MessageViewHolder listHolder, final int i) {
         String messageId=messagelist.get(i).getMessageId();
          String my=FirebaseAuth.getInstance().getCurrentUser().getUid();
-        LinearLayout.LayoutParams lp= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);;
+         String date=messagelist.get(i).getDate();
+         listHolder.dateview.setText(date);
+       RelativeLayout.LayoutParams lp= new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);;
         boolean aBoolean=false;
          if(messageId.equals(my)){
 
             DejaVu(listHolder,lp);
+listHolder.linearLayout.setGravity(Gravity.RIGHT);
 
+          // lp.setGravity(Gravity.CENTER);
 
-
-             lp.gravity= Gravity.RIGHT;
+            // listHolder.bubbleLayout2.setArrowDirection(ArrowDirection.RIGHT);
+            // listHolder.bubbleLayout2.setLayoutParams(lp);
              listHolder.view.setTextColor(R.color.black);
              listHolder.bubbleLayout.setBubbleColor(Color.WHITE);
              listHolder.bubbleLayout.setLayoutParams(lp);
-             //listHolder.bubbleLayout.setLayoutParams(lp);
+          //  listHolder.bubbleLayout.setLayoutParams(lp);
              listHolder.bubbleLayout.setArrowDirection(ArrowDirection.RIGHT);
 
 
@@ -85,13 +95,15 @@ public class messageAdapter extends RecyclerView.Adapter<messageAdapter.MessageV
 
             listHolder.view.setTextColor(Color.WHITE);
             listHolder.bubbleLayout.setArrowDirection(ArrowDirection.LEFT);
+            // listHolder.bubbleLayout2.setArrowDirection(ArrowDirection.LEFT);
          }
        listHolder.view.setText(messagelist.get(i).getMessage());
+      //  Picasso.get().load(String.valueOf(messagelist.get(i).getStringArrayList())).into(listHolder.imageView);
        // listHolder.mSender.setText(messagelist.get(i).getMessageId());
        // listHolder.mSender.setText(messagelist.get(i).getSenderId());
 
     }
-    public void DejaVu(MessageViewHolder messageViewHolder,LinearLayout.LayoutParams layoutParams){
+    public void DejaVu(MessageViewHolder messageViewHolder,RelativeLayout.LayoutParams layoutParams){
        // LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         //   lp.setMargins(100,300,2,0);
         if(bBoolean==false){
